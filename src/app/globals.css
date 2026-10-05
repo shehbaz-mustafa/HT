@@ -1,11 +1,135 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-:root{--bg:#f5f3ee;--surface:#fbf9f4;--muted:#f0eee9;--fg:#1b1c19;--secondary:#5f5e5e;--border:#c0c9c0;--accent:#1f5c3f;--accent-hover:#00442a;--on-accent:#ffffff;--danger:#ba1a1a}
-.dark{--bg:#141414;--surface:#1b1b1a;--muted:#202120;--fg:#ecebe6;--secondary:#a3a39d;--border:#3a3b37;--accent:#6fb08a;--accent-hover:#8cc5a2;--on-accent:#0b1f15;--danger:#ff8a80}
-@media (prefers-color-scheme:dark){:root:not(.light){--bg:#141414;--surface:#1b1b1a;--muted:#202120;--fg:#ecebe6;--secondary:#a3a39d;--border:#3a3b37;--accent:#6fb08a;--accent-hover:#8cc5a2;--on-accent:#0b1f15;--danger:#ff8a80}}
-@layer base{*{border-color:var(--border)}body{background:var(--bg);color:var(--fg);font-family:var(--font-sans),system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}h1,h2{font-family:var(--font-serif),Georgia,serif;font-weight:400}}
-.tnum{font-variant-numeric:tabular-nums}
-.label{font-size:10px;line-height:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary)}
 
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --bg:          #f5f3ee;
+  --surface:     #fbf9f4;
+  --muted:       #f0eee9;
+  --fg:          #1b1c19;
+  --secondary:   #5f5e5e;
+  --border:      #c0c9c0;
+  --accent:      #1f5c3f;
+  --accent-hover:#00442a;
+  --on-accent:   #ffffff;
+  --danger:      #ba1a1a;
+  --ring:        #1f5c3f40;
+}
+
+.dark,
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg:          #141414;
+    --surface:     #1b1b1a;
+    --muted:       #202120;
+    --fg:          #ecebe6;
+    --secondary:   #a3a39d;
+    --border:      #3a3b37;
+    --accent:      #6fb08a;
+    --accent-hover:#8cc5a2;
+    --on-accent:   #0b1f15;
+    --danger:      #ff8a80;
+    --ring:        #6fb08a40;
+  }
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    border-color: var(--border);
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  ::placeholder {
+    color: var(--secondary);
+    opacity: 0.7;
+  }
+}
+
+/* ── Utilities ──────────────────────────────────────────────────────────────── */
+.tnum    { font-variant-numeric: tabular-nums; }
+.label   { font-size: 10px; line-height: 12px; font-weight: 600;
+           letter-spacing: .08em; text-transform: uppercase; color: var(--secondary); }
+
+/* Input & button shared base */
+.input-base {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--fg);
+  transition: border-color 150ms, box-shadow 150ms;
+}
+.input-base:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.625rem;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: none;
+  cursor: pointer;
+  transition: background 150ms, opacity 150ms;
+  width: 100%;
+}
+.btn-primary:hover  { background: var(--accent-hover); }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.625rem;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 150ms, opacity 150ms;
+  width: 100%;
+}
+.btn-ghost:hover    { background: var(--muted); }
+.btn-ghost:disabled { opacity: 0.55; cursor: not-allowed; }

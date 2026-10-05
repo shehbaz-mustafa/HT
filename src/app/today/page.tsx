@@ -32,6 +32,10 @@ export default async function TodayPage() {
     done: done.has(`${h.id}|${today}`),
     week: dates.map((d) => ({ date: d, scheduled: scheduled(h, d), done: done.has(`${h.id}|${d}`) })),
   }));
-  return <TodayView rows={rows} today={today} dates={dates} title={longDate(today)} />;
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-8 space-y-6">
+      <TodayView rows={rows} today={today} dates={dates} title={longDate(today)} />
+    </div>
+  );
 }
 
