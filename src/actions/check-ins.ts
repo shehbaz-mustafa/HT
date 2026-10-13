@@ -17,6 +17,6 @@ export async function toggleCheckIn(input: unknown): Promise<{ error?: string }>
     : await supabase.from('check_ins').delete().eq('habit_id', habitId).eq('date', date);
   if (error) return { error: 'Could not save. Try again.' };
   revalidatePath('/today');
+  revalidatePath('/habits');
   return {};
 }
-
