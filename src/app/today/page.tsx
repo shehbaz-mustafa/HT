@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { isoDow, localDate, longDate, weekOf } from '@/lib/dates';
 import { TodayView, type Row } from '@/components/today-view';
+import { SidebarNav } from '@/components/sidebar-nav';
 
 type HabitRow = { id: string; name: string; category: string | null; frequency_type: 'daily' | 'weekly' | 'custom'; days_of_week: number[]; reminder_time: string | null };
 
@@ -33,9 +34,15 @@ export default async function TodayPage() {
     done: done.has(`${h.id}|${today}`),
     week: dates.map((d) => ({ date: d, scheduled: scheduled(h, d), done: done.has(`${h.id}|${d}`) })),
   }));
+  const recordDate = today.replace(/-/g, '.');
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 space-y-6">
-      <TodayView rows={rows} today={today} dates={dates} title={longDate(today)} />
+    <div className="flex min-h-screen">
+      <SidebarNav recordDate={recordDate} />
+      <main className="ml-44 flex-1 min-w-0">
+        <div className="mx-auto max-w-5xl px-4 py-8 space-y-6">
+          <TodayView rows={rows} today={today} dates={dates} title={longDate(today)} />
+        </div>
+      </main>
     </div>
   );
 }
