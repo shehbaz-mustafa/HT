@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { isoDow, localDate, longDate, weekOf } from '@/lib/dates';
 import { TodayView, type Row } from '@/components/today-view';
@@ -8,7 +7,8 @@ type HabitRow = { id: string; name: string; category: string | null; frequency_t
 export default async function TodayPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/login');
+  // Middleware handles redirect for unauthenticated users — return null as fallback.
+  if (!user) return null;
   const { data: profile } = await supabase.from('profiles').select('timezone').eq('id', user.id).single();
   const today = localDate(profile?.timezone ?? 'UTC');
   const dates = weekOf(today);
@@ -17,7 +17,8 @@ export default async function TodayPage() {
     supabase.from('check_ins').select('habit_id,date').gte('date', dates[0]).lte('date', dates[6]),
     supabase.from('habit_stats').select('habit_id,current_streak'),
   ]);
-  if (habits.error || checks.error || stats.error) throw new Error('load failed');
+  if (habits.error || checks.error) throw new Error('load failed');
+  if (stats.error) console.warn('habit_stats unavailable, streaks will show 0');
   const done = new Set((checks.data ?? []).map((c) => `${c.habit_id}|${c.date}`));
   const streaks = new Map((stats.data ?? []).map((s) => [s.habit_id as string, s.current_streak as number]));
   const scheduled = (h: HabitRow, d: string) => h.frequency_type !== 'custom' || h.days_of_week.includes(isoDow(d));
@@ -38,4 +39,3 @@ export default async function TodayPage() {
     </div>
   );
 }
-

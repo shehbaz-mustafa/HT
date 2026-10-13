@@ -30,6 +30,7 @@ export async function updateSession(req: NextRequest) {
   };
   if (!user && !isPublic) return redirectTo('/login');
   if (user && (path === '/login' || path === '/signup')) return redirectTo('/today');
+  if (path === '/') return redirectTo(user ? '/today' : '/login');
   return res;
 }
 
