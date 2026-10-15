@@ -7,19 +7,36 @@ const PUBLIC = ['/login', '/signup', '/auth'];
 
 export async function updateSession(req: NextRequest) {
   let res = NextResponse.next({ request: req });
-  const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
-    cookies: {
-      getAll: () => req.cookies.getAll(),
-      setAll(list: CookieList) {
-        list.forEach(({ name, value }) => req.cookies.set(name, value));
-        res = NextResponse.next({ request: req });
-        list.forEach(({ name, value, options }) => res.cookies.set(name, value, options));
+  
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => req.cookies.getAll(),
+        setAll(list: CookieList) {
+          list.forEach(({ name, value }) => req.cookies.set(name, value));
+          res = NextResponse.next({ request: req });
+          list.forEach(({ name, value, options }) => res.cookies.set(name, value, options));
+        },
       },
-    },
-  });
-  const { data: { user } } = await supabase.auth.getUser();
+    }
+  );
+
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch (e) {
+    // If Supabase request fails or is offline, user remains null
+  }
+
+  const hasDemoCookie = req.cookies.has('ht_demo_session');
+  const isAuthenticated = !!user || hasDemoCookie;
+
   const path = req.nextUrl.pathname;
   const isPublic = PUBLIC.some((p) => path === p || path.startsWith(`${p}/`));
+
   const redirectTo = (to: string) => {
     const url = req.nextUrl.clone();
     url.pathname = to;
@@ -28,9 +45,18 @@ export async function updateSession(req: NextRequest) {
     res.cookies.getAll().forEach((c) => r.cookies.set(c));
     return r;
   };
-  if (!user && !isPublic) return redirectTo('/login');
-  if (user && (path === '/login' || path === '/signup')) return redirectTo('/today');
-  if (path === '/') return redirectTo(user ? '/today' : '/login');
+
+  if (!isAuthenticated && !isPublic) {
+    return redirectTo('/login');
+  }
+
+  if (isAuthenticated && (path === '/login' || path === '/signup')) {
+    return redirectTo('/today');
+  }
+
+  if (path === '/') {
+    return redirectTo(isAuthenticated ? '/today' : '/login');
+  }
+
   return res;
 }
-

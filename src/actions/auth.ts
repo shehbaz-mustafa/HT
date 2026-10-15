@@ -1,5 +1,6 @@
 'use server';
-import { headers } from 'next/headers';
+
+import { headers, cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
@@ -51,9 +52,24 @@ export async function magicLink(_: FormState, fd: FormData): Promise<FormState> 
   return { message: 'Check your email for a sign-in link.' };
 }
 
-export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  redirect('/login');
+export async function demoSignIn() {
+  const c = await cookies();
+  c.set('ht_demo_session', 'active', {
+    path: '/',
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    sameSite: 'lax',
+  });
+  redirect('/today');
 }
 
+export async function signOut() {
+  const c = await cookies();
+  c.delete('ht_demo_session');
+  try {
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+  } catch (e) {
+    // Ignore error
+  }
+  redirect('/login');
+}

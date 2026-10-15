@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useActionState, useEffect, useRef, useState } from 'react';
-import { magicLink, signIn, signUp } from '@/actions/auth';
+import { demoSignIn, magicLink, signIn, signUp } from '@/actions/auth';
 import type { FormState } from '@/lib/types';
 
 /* ── helpers ─────────────────────────────────────────────────────────────── */
@@ -270,6 +270,22 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
               </form>
             </>
           )}
+
+          {/* Demo / Guest Access */}
+          <div className="relative flex items-center gap-3 my-1">
+            <div className="flex-1 border-t" style={{ borderColor: 'var(--border)' }} />
+            <span className="text-xs font-mono" style={{ color: 'var(--secondary)' }}>or</span>
+            <div className="flex-1 border-t" style={{ borderColor: 'var(--border)' }} />
+          </div>
+
+          <form action={demoSignIn}>
+            <button
+              type="submit"
+              className="btn-ghost hover:border-[--accent] text-xs font-semibold uppercase tracking-wider"
+            >
+              Explore Ledger as Guest / Demo
+            </button>
+          </form>
 
           {/* Switch mode link */}
           <p className="text-center text-sm" style={{ color: 'var(--secondary)' }}>
