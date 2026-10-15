@@ -5,6 +5,7 @@ import { useStore } from '@/lib/storage/store-context';
 import { calculateHabitStats, isHabitScheduled, isHabitCompleted } from '@/lib/habit-logic';
 import { weekOf, longDate, isoDow, addDays } from '@/lib/dates';
 import { NotificationsBanner } from '@/components/notifications-banner';
+import { HabitIcon } from '@/components/ui/habit-icon';
 import {
   Check,
   Plus,
@@ -184,7 +185,7 @@ export function TodayDashboard() {
             </span>
             <span className="font-mono text-sm text-[--secondary]">/ {totalTodayTasks} completed</span>
           </div>
-          <div className="h-1.5 w-full bg-[--muted] rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-[--muted] rounded-sm overflow-hidden">
             <div
               className="h-full bg-[--accent] transition-all duration-300"
               style={{ width: `${taskCompletionRate}%` }}
@@ -211,7 +212,7 @@ export function TodayDashboard() {
             </span>
             <span className="font-mono text-sm text-[--secondary]">/ {totalHabitsCount} checked in</span>
           </div>
-          <div className="h-1.5 w-full bg-[--muted] rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-[--muted] rounded-sm overflow-hidden">
             <div
               className="h-full bg-[--accent] transition-all duration-300"
               style={{ width: `${habitCompletionRate}%` }}
@@ -234,7 +235,9 @@ export function TodayDashboard() {
             {bestStreakHabit && bestStreakHabit.stats.currentStreak > 0 ? (
               <div className="mt-2 space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">{bestStreakHabit.habit.icon}</span>
+                  <span className="h-6 w-6 rounded flex items-center justify-center text-[--accent] bg-[--accent]/15 border border-[--accent]/30">
+                    <HabitIcon name={bestStreakHabit.habit.icon} className="h-3.5 w-3.5" />
+                  </span>
                   <span className="font-serif font-bold text-base truncate">
                     {bestStreakHabit.habit.name}
                   </span>

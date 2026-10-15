@@ -3,13 +3,21 @@ import './globals.css';
 import { AppProvider } from '@/components/app-provider';
 
 export const metadata: Metadata = {
-  title: 'HT – Habit Tracker & Task Management',
-  description: 'A polished, intentional task management and habit tracking protocol.',
+  title: 'HT - Habit and Task Ledger',
+  description: 'Structured personal ledger for habit protocols and task scheduling.',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body>
         <AppProvider>{children}</AppProvider>
       </body>

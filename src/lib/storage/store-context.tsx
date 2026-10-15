@@ -275,7 +275,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       name: data.name.trim(),
       description: data.description ?? '',
       category: data.category ?? 'Personal',
-      icon: data.icon ?? '🎯',
+      icon: data.icon ?? 'target',
       color: data.color ?? '#1f5c3f',
       frequency_type: data.frequency_type ?? 'daily',
       days_of_week: data.days_of_week ?? [0, 1, 2, 3, 4, 5, 6],

@@ -89,16 +89,16 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
         </div>
         <div className="space-y-4">
           <h2 className="text-4xl leading-tight" style={{ color: 'var(--on-accent)', fontFamily: 'Georgia, serif' }}>
-            Build habits that&nbsp;last.
+            Habit and Task Ledger
           </h2>
           <p className="text-base opacity-80 leading-relaxed" style={{ color: 'var(--on-accent)' }}>
-            Track daily routines, visualise your streaks, and stay consistent — one day at a time.
+            A structured ledger to track daily protocols, monitor schedule-aware continuity, and schedule tasks.
           </p>
         </div>
-        <p className="text-xs opacity-50" style={{ color: 'var(--on-accent)' }}>© {new Date().getFullYear()} HT</p>
+        <p className="text-xs opacity-50" style={{ color: 'var(--on-accent)' }}>HT Ledger Record</p>
       </div>
 
-      {/* ── Right: form panel ── */}
+      {/* Right: form panel */}
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm space-y-8">
 
@@ -107,12 +107,12 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
             {/* Mobile logo */}
             <span className="mb-4 block text-2xl font-bold lg:hidden" style={{ fontFamily: 'Georgia, serif' }}>HT</span>
             <h1 className="text-3xl" style={{ color: 'var(--fg)' }}>
-              {isLogin ? 'Welcome back' : 'Create account'}
+              {isLogin ? 'Sign In' : 'Create Account'}
             </h1>
             <p className="text-sm" style={{ color: 'var(--secondary)' }}>
               {isLogin
-                ? 'Sign in to your habit tracker.'
-                : 'Start tracking habits today — free, no credit card.'}
+                ? 'Sign in to access your ledger.'
+                : 'Start tracking habits with persistent local and cloud storage.'}
             </p>
           </div>
 
@@ -298,6 +298,17 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
               {isLogin ? 'Create one' : 'Sign in'}
             </Link>
           </p>
+
+          {/* Legal links */}
+          <div className="pt-4 border-t border-border flex items-center justify-center gap-3 text-xs text-[--secondary]">
+            <Link href="/privacy" className="hover:underline">
+              Privacy Policy
+            </Link>
+            <span>-</span>
+            <Link href="/terms" className="hover:underline">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </div>
     </div>

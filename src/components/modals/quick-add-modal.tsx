@@ -5,15 +5,16 @@ import { useStore } from '@/lib/storage/store-context';
 import type { PriorityLevel, HabitFrequency, HabitTargetType } from '@/lib/types';
 import { Check, X, Calendar, Clock, Tag, Flame, Plus, AlertCircle } from 'lucide-react';
 
-const ICONS = ['💧', '📖', '🏃', '🧘', '🏋️', '⚡', '🌙', '✍️', '🍎', '🎯', '🌿', '💻'];
+import { AVAILABLE_HABIT_ICONS, HabitIcon } from '@/components/ui/habit-icon';
+
 const COLORS = [
   '#1f5c3f', // Forest green
   '#0d9488', // Teal
   '#d97706', // Amber
   '#ba1a1a', // Crimson
-  '#4f46e5', // Indigo
-  '#7c3aed', // Purple
-  '#475569', // Slate
+  '#334155', // Slate
+  '#475569', // Steel
+  '#292524', // Warm stone
 ];
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -45,7 +46,7 @@ export function QuickAddModal() {
   const [habitName, setHabitName] = useState('');
   const [habitDesc, setHabitDesc] = useState('');
   const [habitCategory, setHabitCategory] = useState('Health');
-  const [habitIcon, setHabitIcon] = useState('💧');
+  const [habitIcon, setHabitIcon] = useState('droplets');
   const [habitColor, setHabitColor] = useState(COLORS[0]);
   const [habitFreq, setHabitFreq] = useState<HabitFrequency>('daily');
   const [habitDays, setHabitDays] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
@@ -329,20 +330,21 @@ export function QuickAddModal() {
             {/* Icon & Color selector */}
             <div className="space-y-3">
               <div>
-                <label className="label block mb-1.5">Icon / Emoji</label>
+                <label className="label block mb-1.5">Protocol Symbol</label>
                 <div className="flex flex-wrap gap-1.5">
-                  {ICONS.map((emoji) => (
+                  {AVAILABLE_HABIT_ICONS.map((item) => (
                     <button
-                      key={emoji}
+                      key={item.id}
                       type="button"
-                      onClick={() => setHabitIcon(emoji)}
-                      className={`h-8 w-8 rounded text-base flex items-center justify-center border transition-all ${
-                        habitIcon === emoji
-                          ? 'border-[--accent] bg-[--accent]/15 scale-110'
-                          : 'border-border hover:bg-[--muted]'
+                      title={item.label}
+                      onClick={() => setHabitIcon(item.id)}
+                      className={`h-8 w-8 rounded text-sm flex items-center justify-center border transition-all ${
+                        habitIcon === item.id
+                          ? 'border-[--accent] bg-[--accent]/15 scale-105 text-[--accent]'
+                          : 'border-border text-[--secondary] hover:bg-[--muted] hover:text-[--fg]'
                       }`}
                     >
-                      {emoji}
+                      <HabitIcon name={item.id} className="h-4 w-4" />
                     </button>
                   ))}
                 </div>
@@ -356,7 +358,7 @@ export function QuickAddModal() {
                       key={c}
                       type="button"
                       onClick={() => setHabitColor(c)}
-                      className={`h-6 w-6 rounded-full border-2 transition-transform ${
+                      className={`h-5 w-5 rounded-sm border-2 transition-transform ${
                         habitColor === c ? 'scale-125 border-[--fg]' : 'border-transparent'
                       }`}
                       style={{ backgroundColor: c }}

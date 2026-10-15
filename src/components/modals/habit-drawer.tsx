@@ -7,15 +7,16 @@ import { calculateHabitStats, isHabitScheduled } from '@/lib/habit-logic';
 import { addDays } from '@/lib/dates';
 import { X, Trash2, Archive, Flame, Award, Calendar, Check, AlertTriangle } from 'lucide-react';
 
-const ICONS = ['💧', '📖', '🏃', '🧘', '🏋️', '⚡', '🌙', '✍️', '🍎', '🎯', '🌿', '💻'];
+import { AVAILABLE_HABIT_ICONS, HabitIcon } from '@/components/ui/habit-icon';
+
 const COLORS = [
   '#1f5c3f',
   '#0d9488',
   '#d97706',
   '#ba1a1a',
-  '#4f46e5',
-  '#7c3aed',
+  '#334155',
   '#475569',
+  '#292524',
 ];
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -34,7 +35,7 @@ export function HabitDrawer() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [icon, setIcon] = useState('💧');
+  const [icon, setIcon] = useState('droplets');
   const [color, setColor] = useState(COLORS[0]);
   const [frequency, setFrequency] = useState<HabitFrequency>('daily');
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([0, 1, 2, 3, 4, 5, 6]);
@@ -50,7 +51,7 @@ export function HabitDrawer() {
       setName(editingHabit.name);
       setDescription(editingHabit.description || '');
       setCategory(editingHabit.category);
-      setIcon(editingHabit.icon || '💧');
+      setIcon(editingHabit.icon || 'droplets');
       setColor(editingHabit.color || COLORS[0]);
       setFrequency(editingHabit.frequency_type);
       setDaysOfWeek(editingHabit.days_of_week || [0, 1, 2, 3, 4, 5, 6]);
@@ -114,10 +115,10 @@ export function HabitDrawer() {
         <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-[--muted]/40 sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <span
-              className="h-8 w-8 rounded-full flex items-center justify-center text-lg shadow-sm"
-              style={{ backgroundColor: `${color}20`, border: `1px solid ${color}40` }}
+              className="h-8 w-8 rounded flex items-center justify-center text-sm shadow-sm"
+              style={{ backgroundColor: `${color}20`, border: `1px solid ${color}40`, color }}
             >
-              {icon}
+              <HabitIcon name={icon} className="h-4 w-4" />
             </span>
             <div>
               <span className="label block">Habit Protocol</span>
@@ -190,18 +191,21 @@ export function HabitDrawer() {
           {/* Icon and Color */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label block mb-1.5">Icon / Emoji</label>
+              <label className="label block mb-1.5">Protocol Symbol</label>
               <div className="flex flex-wrap gap-1">
-                {ICONS.slice(0, 8).map((em) => (
+                {AVAILABLE_HABIT_ICONS.slice(0, 8).map((item) => (
                   <button
-                    key={em}
+                    key={item.id}
                     type="button"
-                    onClick={() => setIcon(em)}
-                    className={`h-7 w-7 rounded text-sm flex items-center justify-center border transition-all ${
-                      icon === em ? 'border-[--accent] bg-[--accent]/20 scale-110' : 'border-border'
+                    title={item.label}
+                    onClick={() => setIcon(item.id)}
+                    className={`h-7 w-7 rounded text-xs flex items-center justify-center border transition-all ${
+                      icon === item.id
+                        ? 'border-[--accent] bg-[--accent]/20 text-[--accent] scale-105'
+                        : 'border-border text-[--secondary] hover:text-[--fg]'
                     }`}
                   >
-                    {em}
+                    <HabitIcon name={item.id} className="h-3.5 w-3.5" />
                   </button>
                 ))}
               </div>
@@ -214,7 +218,7 @@ export function HabitDrawer() {
                     key={c}
                     type="button"
                     onClick={() => setColor(c)}
-                    className={`h-5 w-5 rounded-full border-2 transition-transform ${
+                    className={`h-5 w-5 rounded-sm border-2 transition-transform ${
                       color === c ? 'scale-125 border-[--fg]' : 'border-transparent'
                     }`}
                     style={{ backgroundColor: c }}
